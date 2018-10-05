@@ -1,0 +1,17 @@
+{
+  "name": "uniBrowser",
+  "scripts": {
+    "start": "node src/index"
+  },
+  "dependencies": {
+    "debug": "~2.2.0",
+    "mocha": "5.2.0",
+    "chai": "4.2.0",
+    "sinon": "6.3.5",
+    "less-middleware": "3.0.1",
+    "express": "~4.14.0",
+    "lodash": "^4.17.4",
+    "mongoose": "^4.11.13",
+    "node-schedule": "^1.2.5"
+  }
+}
