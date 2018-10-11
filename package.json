@@ -8,6 +8,7 @@
     "mocha": "5.2.0",
     "chai": "4.2.0",
     "sinon": "6.3.5",
+    "js-logger": "1.4.1",
     "less-middleware": "3.0.1",
     "express": "~4.14.0",
     "lodash": "^4.17.4",
