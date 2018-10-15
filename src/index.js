@@ -8,7 +8,6 @@ var express = require('express'),
     less = require('less-middleware');
 
 // Compile and serve CSS
-
 app.use(less(path.join(__dirname,'source','less'),{
     dest: path.join(__dirname, 'public'),
     options: {
@@ -31,7 +30,6 @@ var data = fs.readFileSync('config.json', 'utf8');
 var config = JSON.parse(data);
 
 // Getting the database up and running
-
 var dbString = "mongodb://" +
     config.dbUsername + ':' +
     config.dbPassword + '@' +
@@ -47,6 +45,7 @@ mongoose.connect(dbString, function(error) {
     }
 });
 
+const Professor = require(config.rootDir+'/models/Professor.js');
 
 // Route the HTTP GET request
 app.get("/",function(req,res){
