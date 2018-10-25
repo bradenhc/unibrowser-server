@@ -9,15 +9,33 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
-    db,
+    db = require("mongodb"),
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
+
+    var data = fs.readFileSync('./config.json', 'utf8');
+    var config = JSON.parse(data);
+
+    var url = "mongodb://" +
+        config.dbUrl + ":" +
+        config.dbPort + "/" +
+        config.dbName;
+
+    MongoClient.connect(url, function (err, database) {
+        if (err) {
+        throw err;
+        }
+        else {
+            db = database;
+            console.log("connected to DB");
+        }
+    });
 
 unibrowseRouter.get("/professors", function(req,res){
     /*
     * storing the user passed string in a variable
     */
-    var queryString = req.query['search'];
+    var queryString = req.query['query'];
 
     /*
     * define the criteria to sort the results.
@@ -98,7 +116,7 @@ unibrowseRouter.get("/faqs", function(req,res){
     /*
     * storing the user passed string in a variable
     */
-    var queryString = req.query['search'];
+    var queryString = req.query["query"];
 
     /*
     * define the criteria to sort the results.
@@ -109,6 +127,7 @@ unibrowseRouter.get("/faqs", function(req,res){
     * Excluding the ID field while displaying results.
     */
     db.collection('faqs').find({"title": {$regex:queryString}}, { _id: 0 }).sort(mysort).toArray(function(err,result){
+
         if(err) throw err;
 
         /*
