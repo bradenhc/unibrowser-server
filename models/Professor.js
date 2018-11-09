@@ -6,11 +6,9 @@ const Schema = mongoose.Schema;
 
 // Create Schema for Professor
 var ProfessorSchema = new Schema({
-    Heading : String,
-    Content : String,
-    URL : String,
-    Tags : Array,
-    Rank : Number
+    name : String,
+    research : String,
+    contact : String
 });
 
 // Compile model from Schema
