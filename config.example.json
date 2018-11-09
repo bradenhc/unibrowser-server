@@ -2,7 +2,7 @@
   "rootDir" : "/Users/sandeepkhanna/Desktop/526 Software Development Methods/unibrowser-server/",
   "dbUrl": "localhost",
   "dbPort": "27017",
-  "dbName": "uniBrowser",
+  "dbName": "unibrowser",
   "dbUsername": "",
   "dbPassword": ""
 }

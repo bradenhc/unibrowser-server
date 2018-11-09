@@ -12,8 +12,6 @@ var express = require('express'),
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
 
-app.use('/app/', unibrowseRouter);
-
 // Compile and serve CSS
 app.use(less(path.join(__dirname,'source','less'),{
     dest: path.join(__dirname, 'public'),
@@ -37,27 +35,27 @@ var data = fs.readFileSync('config.json', 'utf8');
 var config = JSON.parse(data);
 
 // Getting the database up and running
-var dbString = "mongodb://" +
-    config.dbUsername + ':' +
-    config.dbPassword + '@' +
-    config.dbUrl + ":" +
-    config.dbPort + "/" +
-    config.dbName;
+// var dbString = "mongodb://" +
+//     config.dbUsername + ':' +
+//     config.dbPassword + '@' +
+//     config.dbUrl + ":" +
+//     config.dbPort + "/" +
+//     config.dbName;
+//
+// var url = "mongodb://" +
+//     config.dbUrl + ":" +
+//     config.dbPort + "/" +
+//     config.dbName;
+//
+// mongoose.connect(dbString, function(error) {
+//   if (!error) {
+//     logger.info('local mongodb connected');
+//   } else {
+//       logger.error(dbString + ' mongodb not connected ' + error);
+//     }
+// });
 
-var url = "mongodb://" +
-    config.dbUrl + ":" +
-    config.dbPort + "/" +
-    config.dbName;
-
-mongoose.connect(dbString, function(error) {
-  if (!error) {
-    logger.info('local mongodb connected');
-  } else {
-      logger.error(dbString + ' mongodb not connected ' + error);
-    }
-});
-
-const Professor = require(config.rootDir+'/models/Professor.js');
+app.use('/api', unibrowseRouter);
 
 // Route the HTTP GET request
 app.get("/home",function(req,res){
@@ -65,20 +63,8 @@ app.get("/home",function(req,res){
   // nothing special to do here yet
 });
 
-console.log(dbString);
-
-MongoClient.connect(url, function (err, database) {
-    if (err) {
-    throw err;
-    }
-    else {
-        db = database;
-        console.log("connected to DB");
-    }
-});
-
 // setup server
-var server = app.listen(8081);
+var server = app.listen(8080);
 // console.log(app._router.stack);
 
 module.exports = app;

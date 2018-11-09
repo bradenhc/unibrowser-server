@@ -9,21 +9,39 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
-    db,
+    db = require("mongodb"),
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
+
+    var data = fs.readFileSync('./config.json', 'utf8');
+    var config = JSON.parse(data);
+
+    var url = "mongodb://" +
+        config.dbUrl + ":" +
+        config.dbPort + "/" +
+        config.dbName;
+
+    MongoClient.connect(url, function (err, database) {
+        if (err) {
+        throw err;
+        }
+        else {
+            db = database;
+            console.log("connected to DB");
+        }
+    });
 
 unibrowseRouter.get("/professors", function(req,res){
     /*
     * storing the user passed string in a variable
     */
-    var queryString = req.query['search'];
+    var queryString = req.query['query'];
 
     /*
     * define the criteria to sort the results.
     */
     var mysort = { name: 1 };
-
+    console.log(queryString);
     /*
     * Excluding the ID field while displaying results.
     */
@@ -98,7 +116,7 @@ unibrowseRouter.get("/faqs", function(req,res){
     /*
     * storing the user passed string in a variable
     */
-    var queryString = req.query['search'];
+    var queryString = req.query["query"];
 
     /*
     * define the criteria to sort the results.
@@ -109,6 +127,7 @@ unibrowseRouter.get("/faqs", function(req,res){
     * Excluding the ID field while displaying results.
     */
     db.collection('faqs').find({"title": {$regex:queryString}}, { _id: 0 }).sort(mysort).toArray(function(err,result){
+
         if(err) throw err;
 
         /*
@@ -165,6 +184,39 @@ unibrowseRouter.get("/faqs", function(req,res){
                     });
                 }
             });
+        }
+    });
+});
+
+/***
+	route to fetch free food information
+***/
+unibrowseRouter.get("/freefood", function(req,res){
+
+    console.log("Heya! I am in free food module.");
+    /*
+    * define the criteria to sort the results.
+    */
+    var mysort = { event_date: 1 };
+
+    /*
+    * Excluding the ID field while displaying results.
+    */
+    db.collection('freefood').find().sort(mysort).toArray(function(err,result){
+    if(err) throw err;
+
+        /*
+        * If the searched string is found, the result is returned. Else, an error page is displayed.
+        * check array contains information.
+        */
+        if (result.length!=0){
+            console.log("Found a matching result.");
+            res.send(result);
+            db.close();
+        }
+        else{
+            console.log("Could not find a matching result.");
+            res.send(404)
         }
     });
 });
