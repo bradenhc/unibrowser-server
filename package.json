@@ -2,7 +2,7 @@
   "name": "uniBrowser",
   "scripts": {
     "start": "node src/index",
-	"test": "mocha"
+    "test": "mocha"
   },
   "dependencies": {
     "chai": "4.2.0",
