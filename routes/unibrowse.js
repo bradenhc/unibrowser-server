@@ -221,8 +221,8 @@ unibrowseRouter.get("/freefood", function(req,res){
     });
 });
 
-unibrowseRouter.get("/sport", function(req,res){
-    var queryString = req.query['s_id'];
+unibrowseRouter.get("/sports", function(req,res){
+    var queryString = req.query['query'];
 
     console.log("Heya! I am in sport module. : " + queryString);
     /*
