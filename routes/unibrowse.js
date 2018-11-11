@@ -221,14 +221,19 @@ unibrowseRouter.get("/freefood", function(req,res){
     });
 });
 
-// Route for retrieving events information
+unibrowseRouter.get("/sport", function(req,res){
+    var queryString = req.query['s_id'];
 
-unibrowseRouter.get("/events", function(req,res){
+    console.log("Heya! I am in sport module. : " + queryString);
+    /*
+    * define the criteria to sort the results.
+    */
+    // var mysort = { date: 1 };
 
-    // var mysort = { published: 1 };
-
-    // db.collection('events').find().sort(mysort).toArray(function(err,result){
-    db.collection('events').find().toArray(function(err,result){
+    /*
+    * Excluding the ID field while displaying results.
+    */
+    db.collection('sport').find({"s_id": parseInt(queryString)}).toArray(function(err,result){
     if(err) throw err;
 
         /*
