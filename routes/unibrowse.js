@@ -9,7 +9,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
-    db = require("mongodb"),
+    db,
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
 
@@ -18,15 +18,14 @@ var express = require('express'),
 
     var url = "mongodb://" +
         config.dbUrl + ":" +
-        config.dbPort + "/" +
-        config.dbName;
+        config.dbPort;
 
     MongoClient.connect(url, function (err, database) {
         if (err) {
         throw err;
         }
         else {
-            db = database;
+            db = database.db(config.dbName);
             console.log("connected to DB");
         }
     });
@@ -56,7 +55,7 @@ unibrowseRouter.get("/professors", function(req,res){
             console.log("Found name.");
             // console.log(result);
             res.send(result);
-            db.close();
+
         }
 
         /*
@@ -77,7 +76,7 @@ unibrowseRouter.get("/professors", function(req,res){
                 if (result.length!=0){
                     console.log("Found professors with similar research.");
                     res.send(result);
-                    db.close();
+
                 }
 
                 else{
@@ -92,7 +91,7 @@ unibrowseRouter.get("/professors", function(req,res){
                         if (result.length!=0){
                             console.log("found professors.");
                             res.send(result);
-                            db.close();
+
                         }
 
                         else{
@@ -138,7 +137,7 @@ unibrowseRouter.get("/faqs", function(req,res){
             console.log("Found question.");
             // console.log(result);
             res.send(result);
-            db.close();
+
         }
 
         /*
@@ -159,7 +158,7 @@ unibrowseRouter.get("/faqs", function(req,res){
                 if (result.length!=0){
                     console.log("Found questions with similar attributes.");
                     res.send(result);
-                    db.close();
+
                 }
 
                 else{
@@ -174,7 +173,7 @@ unibrowseRouter.get("/faqs", function(req,res){
                         if (result.length!=0){
                             console.log("Answers matching your search.");
                             res.send(result);
-                            db.close();
+
                         }
 
                         else{
@@ -212,7 +211,7 @@ unibrowseRouter.get("/freefood", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-            db.close();
+
         }
         else{
             console.log("Could not find a matching result.");
@@ -221,9 +220,8 @@ unibrowseRouter.get("/freefood", function(req,res){
     });
 });
 
-// Route for retrieving events information
-
 unibrowseRouter.get("/events", function(req,res){
+    var queryString = req.query['query'];
 
     db.collection('events').find().toArray(function(err,result){
     if(err) throw err;
@@ -234,7 +232,28 @@ unibrowseRouter.get("/events", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-            db.close();
+
+        }
+        else{
+            console.log("Could not find a matching result.");
+            res.send(404)
+        }
+    });
+});
+
+unibrowseRouter.get("/sports", function(req,res){
+    var queryString = req.query['query'];
+
+    db.collection('sports').find().toArray(function(err,result){
+    if(err) throw err;
+        /*
+        * If the searched string is found, the result is returned. Else, an error page is displayed.
+        * check array contains information.
+        */
+        if (result.length!=0){
+            console.log("Found a matching result.");
+            res.send(result);
+
         }
         else{
             console.log("Could not find a matching result.");
