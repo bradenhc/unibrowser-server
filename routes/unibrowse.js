@@ -55,7 +55,7 @@ unibrowseRouter.get("/professors", function(req,res){
             console.log("Found name.");
             // console.log(result);
             res.send(result);
-            
+
         }
 
         /*
@@ -76,7 +76,7 @@ unibrowseRouter.get("/professors", function(req,res){
                 if (result.length!=0){
                     console.log("Found professors with similar research.");
                     res.send(result);
-                    
+
                 }
 
                 else{
@@ -91,7 +91,7 @@ unibrowseRouter.get("/professors", function(req,res){
                         if (result.length!=0){
                             console.log("found professors.");
                             res.send(result);
-                            
+
                         }
 
                         else{
@@ -137,7 +137,7 @@ unibrowseRouter.get("/faqs", function(req,res){
             console.log("Found question.");
             // console.log(result);
             res.send(result);
-            
+
         }
 
         /*
@@ -158,7 +158,7 @@ unibrowseRouter.get("/faqs", function(req,res){
                 if (result.length!=0){
                     console.log("Found questions with similar attributes.");
                     res.send(result);
-                    
+
                 }
 
                 else{
@@ -173,7 +173,7 @@ unibrowseRouter.get("/faqs", function(req,res){
                         if (result.length!=0){
                             console.log("Answers matching your search.");
                             res.send(result);
-                            
+
                         }
 
                         else{
@@ -211,7 +211,28 @@ unibrowseRouter.get("/freefood", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-            
+
+        }
+        else{
+            console.log("Could not find a matching result.");
+            res.send(404)
+        }
+    });
+});
+
+unibrowseRouter.get("/events", function(req,res){
+    var queryString = req.query['query'];
+
+    db.collection('events').find().toArray(function(err,result){
+    if(err) throw err;
+        /*
+        * If the searched string is found, the result is returned. Else, an error page is displayed.
+        * check array contains information.
+        */
+        if (result.length!=0){
+            console.log("Found a matching result.");
+            res.send(result);
+
         }
         else{
             console.log("Could not find a matching result.");
@@ -223,18 +244,8 @@ unibrowseRouter.get("/freefood", function(req,res){
 unibrowseRouter.get("/sports", function(req,res){
     var queryString = req.query['query'];
 
-    console.log("Heya! I am in sport module. : " + queryString);
-    /*
-    * define the criteria to sort the results.
-    */
-    // var mysort = { date: 1 };
-
-    /*
-    * Excluding the ID field while displaying results.
-    */
-    db.collection('sport').find({"s_id": parseInt(queryString)}).toArray(function(err,result){
+    db.collection('sports').find().toArray(function(err,result){
     if(err) throw err;
-
         /*
         * If the searched string is found, the result is returned. Else, an error page is displayed.
         * check array contains information.
@@ -242,7 +253,7 @@ unibrowseRouter.get("/sports", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-            
+
         }
         else{
             console.log("Could not find a matching result.");
