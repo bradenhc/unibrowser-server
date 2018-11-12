@@ -225,12 +225,8 @@ unibrowseRouter.get("/freefood", function(req,res){
 
 unibrowseRouter.get("/events", function(req,res){
 
-    // var mysort = { published: 1 };
-
-    // db.collection('events').find().sort(mysort).toArray(function(err,result){
     db.collection('events').find().toArray(function(err,result){
     if(err) throw err;
-
         /*
         * If the searched string is found, the result is returned. Else, an error page is displayed.
         * check array contains information.
