@@ -11,6 +11,7 @@ var express = require('express'),
     db,
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
+const locationRouter = require('./locations');
 
 // Compile and serve CSS
 app.use(less(path.join(__dirname,'source','less'),{
@@ -61,6 +62,7 @@ app.use(function(req, res, next) {
 });
 
 app.use('/api', unibrowseRouter);
+app.use('/locations', locationRouter);
 
 // Route the HTTP GET request
 app.get("/home",function(req,res){

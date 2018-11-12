@@ -8,7 +8,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
-    db = require("mongodb"),
+    db,
     mongodb = require('mongodb'),
 	should = require('chai').should(),
     MongoClient = mongodb.MongoClient,
@@ -16,15 +16,14 @@ var express = require('express'),
     config = JSON.parse(data);
 var url = "mongodb://" +
     config.dbUrl + ":" +
-    config.dbPort + "/" +
-    config.dbName;
+    config.dbPort;
 
 MongoClient.connect(url, function (err, database) {
     if (err) {
         throw err;
     }
     else {
-        db = database;
+        db = database.db(config.dbName);
         console.log("connected to DB");
     }
 });
