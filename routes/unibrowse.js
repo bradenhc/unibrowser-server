@@ -149,7 +149,9 @@ unibrowseRouter.get("/faqs", function(req,res){
             /*
             * check if the string is a research area of a professor
             */
-            db.collection('faqs').find({"tags": {$regex:queryString}}, { _id: 0 }).sort(mysort).toArray(function(err,result){
+            var words = queryString.split(" ");
+
+            db.collection('faqs').find({"tags": {$in : words}}, { _id: 0 }).sort(mysort).toArray(function(err,result){
                 if(err) throw err;
 
                 /*
@@ -167,6 +169,7 @@ unibrowseRouter.get("/faqs", function(req,res){
                     /*
                     * check if the string is contact information for a professor
                     */
+
                     db.collection('faqs').find({"a": {$regex:queryString}}, { _id: 0 }).sort(mysort).toArray(function(err,result){
                         if(err) throw err;
 
