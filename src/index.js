@@ -11,6 +11,7 @@ var express = require('express'),
     db,
     mongodb = require('mongodb'),
     MongoClient = mongodb.MongoClient;
+const locationRouter = require('./locations');
 
 // Compile and serve CSS
 app.use(less(path.join(__dirname,'source','less'),{
@@ -54,8 +55,14 @@ var config = JSON.parse(data);
 //       logger.error(dbString + ' mongodb not connected ' + error);
 //     }
 // });
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use('/api', unibrowseRouter);
+app.use('/locations', locationRouter);
 
 // Route the HTTP GET request
 app.get("/home",function(req,res){

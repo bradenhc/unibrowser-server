@@ -8,7 +8,7 @@ var express = require('express'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
-    db = require("mongodb"),
+    db,
     mongodb = require('mongodb'),
 	should = require('chai').should(),
     MongoClient = mongodb.MongoClient,
@@ -16,19 +16,17 @@ var express = require('express'),
     config = JSON.parse(data);
 var url = "mongodb://" +
     config.dbUrl + ":" +
-    config.dbPort + "/" +
-    config.dbName;
+    config.dbPort;
 
 MongoClient.connect(url, function (err, database) {
     if (err) {
         throw err;
     }
     else {
-        db = database;
+        db = database.db(config.dbName);
         console.log("connected to DB");
     }
 });
-
 
 describe('/freefood route', () => {
 	it('Check if the results are being retrieved in the correct format', (done) => {
@@ -41,7 +39,7 @@ describe('/freefood route', () => {
 				   console.log(err);
 				   throw err;
 				}
-			
+
 			res.body.forEach((element) => {
 					element.should.have.property("_id");
 					element.should.have.property("event_date");
@@ -52,7 +50,33 @@ describe('/freefood route', () => {
 					element.should.have.property("description");
 					element.should.have.property("location");
 				});
-				
+
+			done();
+		});
+	});
+});
+
+describe('/events route', () => {
+	it('Check if the results are being retrieved in the correct format', (done) => {
+	   request(app)
+		   .get('/api/events')
+		   .expect('content-type', 'application/json; charset=utf-8')
+		   .expect(200)
+		   .end((err, res) => {
+				if (err) {
+				   console.log(err);
+				   throw err;
+				}
+
+			res.body.forEach((element) => {
+					element.should.have.property("_id");
+					element.should.have.property("title");
+					element.should.have.property("published_parsed");
+					element.should.have.property("link");
+					element.should.have.property("media_content");
+					// element.should.have.property("tags");
+				});
+
 			done();
 		});
 	});
