@@ -1,20 +1,27 @@
 {
-  "name": "uniBrowser",
+  "name": "unibrowser-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
     "start": "node src/index",
-	"test": "mocha"
+    "test": "mocha"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "debug": "^4.1.0",
+    "mocha": "^5.2.0",
+    "sinon": "^7.1.1",
+    "supertest": "^3.3.0"
   },
   "dependencies": {
-    "chai": "4.2.0",
-    "debug": "~2.2.0",
-    "express": "~4.14.0",
-    "js-logger": "1.4.1",
-    "less-middleware": "3.0.1",
-    "lodash": "^4.17.4",
-    "mocha": "5.2.0",
-    "mongoose": "^4.11.13",
-    "node-schedule": "^1.2.5",
-    "sinon": "6.3.5",
-    "supertest": "^3.3.0"
+    "express": "^4.16.4",
+    "js-logger": "^1.6.0",
+    "less-middleware": "^3.0.1",
+    "lodash": "^4.17.11",
+    "mongoose": "^5.3.10",
+    "node-schedule": "^1.3.0"
   }
 }
