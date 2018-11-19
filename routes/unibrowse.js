@@ -6,6 +6,8 @@ var express = require('express'),
     unibrowseRouter = express.Router(),
     path = require('path'),
     fs = require('fs'),
+    ip = require("ip"),
+    request = require("request"),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
@@ -29,6 +31,39 @@ var express = require('express'),
             console.log("connected to DB");
         }
     });
+
+  function getLocation() {
+
+    var ipAddress = ip.address();
+    var location = {latitude: "0",
+                    longitude: "0"};
+    var url = 'http://api.ipstack.com/' + ipAddress + '?access_key=fabe18ddb7e247214d52d929c31fd54d';
+
+    console.log("My URL is", url);
+
+    request.get(url,
+      function(error, response, body){
+        if (!error && response.statusCode == 200){
+          var data = JSON.parse(body);
+          console.log("I made it!");
+          location.latitude = data.latitude;
+          location.longitude = data.longitude;
+        }
+        else{
+          console.log("Hit an error here!");
+        }
+    });
+
+    return location;
+  }
+
+  function calculateNearest(long, lat, coordinateList){
+    var myLocation = getLocation();
+    lat = myLocation.latitude;
+    long = myLocation.longitude;
+    console.log("Yaay I'm here!");
+    // return objectID;
+  }
 
 unibrowseRouter.get("/professors", function(req,res){
     /*
