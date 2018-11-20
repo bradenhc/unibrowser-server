@@ -42,8 +42,7 @@ var express = require('express'),
 
     console.log("My URL is", url);
 
-    request.get(url,
-      function(error, response, body){
+    request.get(url, function(error, response, body){
         if (!error && response.statusCode == 200){
           var data = JSON.parse(body);
           console.log("I made it!");
