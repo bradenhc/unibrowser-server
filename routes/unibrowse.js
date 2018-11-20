@@ -8,6 +8,7 @@ var express = require('express'),
     fs = require('fs'),
     ip = require("ip"),
     request = require("request"),
+    distance = require('euclidean-distance'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
@@ -62,7 +63,17 @@ var express = require('express'),
     lat = myLocation.latitude;
     long = myLocation.longitude;
     console.log("Yaay I'm here!");
-    // return objectID;
+    var nearest = {};
+    var pos = 0;
+    var min = distance([lat, long],[coordinateList[0].lat, coordinateList[0].lat]);
+    for (var i in coordinateList){
+      var myDist = distance([lat, long],[coordinateList[i].lat, coordinateList[i].lat]);
+      if(myDist < min){
+        min = myDist;
+        pos = i;
+      }
+    }
+    return coordinateList[pos];
   }
 
 unibrowseRouter.get("/professors", function(req,res){
