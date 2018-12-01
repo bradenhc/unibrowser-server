@@ -1,5 +1,6 @@
 const request = require('supertest');
 var app = require('../src/index');
+const expect = require('chai').expect;
 
 describe('Unibrowser Events API', () => {
     it('should respond with results in correct format', done => {
@@ -13,14 +14,17 @@ describe('Unibrowser Events API', () => {
                     throw err;
                 }
 
-                res.body.forEach(element => {
-                    element.should.have.property('_id');
-                    element.should.have.property('title');
-                    element.should.have.property('published_parsed');
-                    element.should.have.property('link');
-                    element.should.have.property('media_content');
-                    // element.should.have.property("tags");
-                });
+                // Check the format of each element
+                res.body.forEach(doc => {
+                    expect(doc._id).to.not.be.undefined;
+                    expect(doc.title).to.not.be.undefined;
+                    expect(doc.date).to.not.be.undefined;
+                    expect(doc.lat).to.not.be.undefined;
+                    expect(doc.long).to.not.be.undefined;
+                    expect(doc.link).to.not.be.undefined;
+                    expect(doc.image_url).to.not.be.undefined;
+                    expect(doc.tags).to.not.be.undefined;
+                })
 
                 done();
             });

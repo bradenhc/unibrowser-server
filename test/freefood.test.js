@@ -1,8 +1,9 @@
 const request = require('supertest');
 var app = require('../src/index');
+const expect = require('chai').expect;
 
 describe('Unibrowser Free Food API', () => {
-    it('should respond with results in the correct format', (done) => {
+    it('should respond with results in the correct format', done => {
         request(app)
             .get('/api/freefood')
             .expect('content-type', 'application/json; charset=utf-8')
@@ -13,15 +14,14 @@ describe('Unibrowser Free Food API', () => {
                     throw err;
                 }
 
-                res.body.forEach((element) => {
-                    element.should.have.property("_id");
-                    element.should.have.property("event_date");
-                    element.should.have.property("id");
-                    element.should.have.property("url");
-                    element.should.have.property("screen_name");
-                    element.should.have.property("media_url");
-                    element.should.have.property("description");
-                    element.should.have.property("location");
+                res.body.forEach(doc => {
+                    expect(doc._id).to.not.be.undefined;
+                    expect(doc.title).to.not.be.undefined;
+                    expect(doc.date).to.not.be.undefined;
+                    expect(doc.description).to.not.be.undefined;
+                    expect(doc.location).to.not.be.undefined;
+                    expect(doc.link).to.not.be.undefined;
+                    expect(doc.media_url).to.not.be.undefined;
                 });
 
                 done();

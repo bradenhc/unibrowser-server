@@ -1,5 +1,6 @@
 const request = require('supertest');
 var app = require('../src/index');
+const expect = require('chai').expect;
 
 describe('Unibrowser Sports API', () => {
     it('should respond with correctly formatted results', done => {
@@ -12,13 +13,9 @@ describe('Unibrowser Sports API', () => {
                     return done(err);
                 }
 
-                res.body.forEach(element => {
-                    element.should.have.property('_id');
-                    element.should.have.property('details');
-                    element.should.have.property('sport');
-                    element.should.have.property('s_id');
-                    // element.should.have.property("address");
-                });
+                // TODO: setup structure of data. It is currently not defined on the Python side, so we can't
+                // explicitly test it here.
+                expect(res.body).to.not.have.length(0);
 
                 done();
             });

@@ -3,9 +3,8 @@ const request = require('supertest');
 const app = require('../src/index');
 
 // Describe tests
-describe('Unibrowser Professors API', function() {
-
-	// TODO: Add a before() statement here to prep the database
+describe('Unibrowser Professors API', () => {
+    // TODO: Add a before() statement here to prep the database
 
     it('should respond with a professor record', done => {
         request(app)
@@ -18,11 +17,13 @@ describe('Unibrowser Professors API', function() {
                     throw err;
                 }
 
-                expect(res.body).to.exist();
-                expect(res.body[0]).to.exist();
-                expect(res.body[0].name).to.exist();
+                res.body.forEach(doc => {
+                    expect(doc._id).to.not.be.undefined;
+                    expect(doc.name).to.not.be.undefined;
+                    expect(doc.research).to.not.be.undefined;
+                    expect(doc.contact).to.not.be.undefined;
+                });
                 done();
             });
-        done();
     });
 });
