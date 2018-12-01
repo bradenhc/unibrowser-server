@@ -47,7 +47,6 @@ var express = require('express'),
         dfd.reject();
       }
     });
-    console.log("IP dfd: ", dfd);
     return dfd;
   }
 
@@ -61,30 +60,22 @@ var express = require('express'),
     request.get(url, function (error, response, body){
       if (!error){
         var data = JSON.parse(body);
-        console.log("I made it!");
         location.latitude = data.latitude;
         location.longitude = data.longitude;
-        console.log("Location: ", location);
         dfd.resolve(location);
       }
       else{
         dfd.reject();
       }
     });
-    console.log("Location dfd: ", dfd);
     return dfd;
   }
 
   function calculateNearest(long, lat, coordinateList){
-    var myLocation = getLocation();
-    lat = myLocation.latitude;
-    long = myLocation.longitude;
-    console.log("Yaay I'm here!");
-    var nearest = {};
     var pos = 0;
-    var min = distance([lat, long],[coordinateList[0].lat, coordinateList[0].lat]);
+    var min = distance([lat, long],[coordinateList[1].latitude, coordinateList[1].longitude]);
     for (var i in coordinateList){
-      var myDist = distance([lat, long],[coordinateList[i].lat, coordinateList[i].lat]);
+      var myDist = distance([lat, long],[coordinateList[i].latitude, coordinateList[i].longitude]);
       if(myDist < min){
         min = myDist;
         pos = i;
@@ -104,7 +95,6 @@ unibrowseRouter.get("/professors", function(req,res){
     * define the criteria to sort the results.
     */
     var mysort = { name: 1 };
-    queryString = "name=John";
     /*
     * Excluding the ID field while displaying results.
     */
@@ -278,32 +268,12 @@ unibrowseRouter.get("/freefood", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-
         }
         else{
             console.log("Could not find a matching result.");
             res.send(404)
         }
     });
-
-    var location  = "";
-
-    _.when(getIP())
-      .done(function(ipAddress) {
-          _.when(getLocation(ipAddress))
-            .done(function(data) {
-              location = data;
-              console.log("Completed loop.");
-              // dfd.resolve();
-            })
-            .fail(function() {
-              console.log("Failed to load location.");
-            });
-          })
-      .fail(function() {
-          console.log("Failed to load IP.");
-    });
-
 });
 
 unibrowseRouter.get("/events", function(req,res){
@@ -317,31 +287,37 @@ unibrowseRouter.get("/events", function(req,res){
         */
         if (result.length!=0){
             console.log("Found a matching result.");
-            res.send(result);
+            var location  = "";
+            var events = [];
 
+            for (var x in result){
+              var obj = {longitude: result[x].geo_long,
+                         latitude: result[x].geo_lat};
+              events.push(obj);
+            }
+
+            _.when(getIP())
+              .done(function(ipAddress) {
+                  _.when(getLocation(ipAddress))
+                    .done(function(data) {
+                      location = data;
+                      var nearest = calculateNearest(location.longitude, location.latitude, events);
+                      console.log("My nearest event is ", nearest);
+                    })
+                    .fail(function() {
+                      console.log("Failed to load location.");
+                    });
+                  })
+              .fail(function() {
+                  console.log("Failed to load IP.");
+            });
+
+            res.send(result);
         }
         else{
             console.log("Could not find a matching result.");
             res.send(404)
         }
-    });
-
-    var location  = "";
-
-    _.when(getIP())
-      .done(function(ipAddress) {
-          _.when(getLocation(ipAddress))
-            .done(function(data) {
-              location = data;
-              console.log("Completed loop.");
-              // dfd.resolve();
-            })
-            .fail(function() {
-              console.log("Failed to load location.");
-            });
-          })
-      .fail(function() {
-          console.log("Failed to load IP.");
     });
 
 });
@@ -358,32 +334,12 @@ unibrowseRouter.get("/sports", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-
         }
         else{
             console.log("Could not find a matching result.");
             res.send(404)
         }
     });
-
-    var location  = "";
-
-    _.when(getIP())
-      .done(function(ipAddress) {
-          _.when(getLocation(ipAddress))
-            .done(function(data) {
-              location = data;
-              console.log("Completed loop.");
-              // dfd.resolve();
-            })
-            .fail(function() {
-              console.log("Failed to load location.");
-            });
-          })
-      .fail(function() {
-          console.log("Failed to load IP.");
-    });
-
 });
 
   module.exports = unibrowseRouter;
