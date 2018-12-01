@@ -1,6 +1,6 @@
 const express = require('express');
 const locationApp = express.Router();
-const mongo = require('../src/mongo');
+const mongo = require('../mongo');
 
 const REGEX_LAT_LNG = /[0-9]*\.[0-9]*,-?[0-9]*\.[0-9]*/;
 const REGEX_TIME = /(\d+):(\d+)/;

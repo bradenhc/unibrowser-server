@@ -1,5 +1,5 @@
 const express = require('express');
-const mongo = require('../src/mongo');
+const mongo = require('../mongo');
 const utils = require('./utils');
 
 const sportsRouter = express.Router();

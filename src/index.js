@@ -2,12 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const less = require('less-middleware');
-const faqRouter = require('../routes/faqs');
-const profRouter = require('../routes/professors');
-const freeFoodRouter = require('../routes/freefood');
-const eventsRouter = require('../routes/events');
-const sportsRouter = require('../routes/sports');
-const locationRouter = require('../routes/locations');
+const faqRouter = require('./routes/faqs');
+const profRouter = require('./routes/professors');
+const freeFoodRouter = require('./routes/freefood');
+const eventsRouter = require('./routes/events');
+const sportsRouter = require('./routes/sports');
+const locationRouter = require('./routes/locations');
 
 // Compile and serve CSS
 app.use(

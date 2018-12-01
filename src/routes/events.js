@@ -1,5 +1,5 @@
 const express = require('express');
-const mongo = require('../src/mongo');
+const mongo = require('../mongo');
 const _ = require('underscore.deferred');
 const request = require('request');
 const utils = require('./utils');
