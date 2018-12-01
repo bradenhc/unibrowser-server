@@ -1,0 +1,9 @@
+{
+    "database": {
+        "name": "unibrowser",
+        "host": "localhost",
+        "port": 27017,
+        "username": "",
+        "password": ""
+    }
+}
