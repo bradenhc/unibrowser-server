@@ -1,22 +1,25 @@
-"use strict";
 const request = require('supertest');
-const locationRouter = require('../src/locations');
+const app = require('../src/index');
 
-describe('locations.js', () => {
-    describe('route /', () => {
-        it('Check if the url is responding', () => {
-            request(locationRouter)
-                .get('/')
-                .expect(200)
-                .expect('content-type', 'application/json; charset=utf-8');
-        });
+describe('Unibrowser Locations API', () => {
+    it('should respond with 200 OK', done => {
+        request(app)
+            .get('/locations')
+            .expect(200)
+            .expect('content-type', 'application/json; charset=utf-8')
+            .end((err, res) => {
+                if (err) return done(err);
+                done();
+            });
     });
-    describe('route / with params', () => {
-        it('Check if the url is responding', () => {
-            request(locationRouter)
-                .get('/?lat=1&lng=2')
-                .expect(200)
-                .expect('content-type', 'application/json; charset=utf-8');
-        });
+    it('should respond with 200 OK with lat lng params', done => {
+        request(app)
+            .get('/locations?lat=1&lng=2')
+            .expect(200)
+            .expect('content-type', 'application/json; charset=utf-8')
+            .end((err, res) => {
+                if (err) return done(err);
+                done();
+            });
     });
 });
