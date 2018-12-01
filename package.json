@@ -19,6 +19,8 @@
     "node-schedule": "^1.2.5",
     "request": "^2.88.0",
     "sinon": "6.3.5",
-    "supertest": "^3.3.0"
+    "supertest": "^3.3.0",
+    "underscore": "^1.9.1",
+    "underscore.deferred": "^0.4.0"
   }
 }
