@@ -5,7 +5,11 @@ var express = require('express'),
     // Instantiating express module
     unibrowseRouter = express.Router(),
     path = require('path'),
+    _ = require('underscore.deferred'),
     fs = require('fs'),
+    ip = require("ip"),
+    request = require("request"),
+    distance = require('euclidean-distance'),
     mongoose = require('mongoose'),
     logger = require('js-logger'),
     less = require('less-middleware'),
@@ -30,17 +34,67 @@ var express = require('express'),
         }
     });
 
+  function getIP() {
+    var dfd = _.Deferred();
+    var ipAddress = "0.0.0.0";  // default public ipv4 address
+    request.get("https://api.ipify.org?format=json", function (error, response, body){
+      if(!error){
+        let data = JSON.parse(response.body);
+        ipAddress = data.ip;
+        dfd.resolve(ipAddress);
+      }
+      else{
+        dfd.reject();
+      }
+    });
+    return dfd;
+  }
+
+  function getLocation(ipAddress){
+
+    var dfd = _.Deferred();
+    console.log("My IP Address: ", ipAddress);
+    var location = {latitude: "0",
+                    longitude: "0"};
+    var url = 'http://api.ipstack.com/' + ipAddress + '?access_key=fabe18ddb7e247214d52d929c31fd54d';
+    request.get(url, function (error, response, body){
+      if (!error){
+        var data = JSON.parse(body);
+        location.latitude = data.latitude;
+        location.longitude = data.longitude;
+        dfd.resolve(location);
+      }
+      else{
+        dfd.reject();
+      }
+    });
+    return dfd;
+  }
+
+  function calculateNearest(long, lat, coordinateList){
+    var pos = 0;
+    var min = distance([lat, long],[coordinateList[1].latitude, coordinateList[1].longitude]);
+    for (var i in coordinateList){
+      var myDist = distance([lat, long],[coordinateList[i].latitude, coordinateList[i].longitude]);
+      if(myDist < min){
+        min = myDist;
+        pos = i;
+      }
+    }
+    return coordinateList[pos];
+  }
+
 unibrowseRouter.get("/professors", function(req,res){
     /*
     * storing the user passed string in a variable
     */
+
     var queryString = req.query['query'];
 
     /*
     * define the criteria to sort the results.
     */
     var mysort = { name: 1 };
-    console.log(queryString);
     /*
     * Excluding the ID field while displaying results.
     */
@@ -214,7 +268,6 @@ unibrowseRouter.get("/freefood", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-
         }
         else{
             console.log("Could not find a matching result.");
@@ -234,14 +287,39 @@ unibrowseRouter.get("/events", function(req,res){
         */
         if (result.length!=0){
             console.log("Found a matching result.");
-            res.send(result);
+            var location  = "";
+            var events = [];
 
+            for (var x in result){
+              var obj = {longitude: result[x].geo_long,
+                         latitude: result[x].geo_lat};
+              events.push(obj);
+            }
+
+            _.when(getIP())
+              .done(function(ipAddress) {
+                  _.when(getLocation(ipAddress))
+                    .done(function(data) {
+                      location = data;
+                      var nearest = calculateNearest(location.longitude, location.latitude, events);
+                      console.log("My nearest event is ", nearest);
+                    })
+                    .fail(function() {
+                      console.log("Failed to load location.");
+                    });
+                  })
+              .fail(function() {
+                  console.log("Failed to load IP.");
+            });
+
+            res.send(result);
         }
         else{
             console.log("Could not find a matching result.");
             res.send(404)
         }
     });
+
 });
 
 unibrowseRouter.get("/sports", function(req,res){
@@ -256,7 +334,6 @@ unibrowseRouter.get("/sports", function(req,res){
         if (result.length!=0){
             console.log("Found a matching result.");
             res.send(result);
-
         }
         else{
             console.log("Could not find a matching result.");

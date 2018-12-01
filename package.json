@@ -1,27 +1,31 @@
 {
-  "name": "unibrowser-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start": "node src/index",
-    "test": "mocha"
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "chai": "^4.2.0",
-    "debug": "^4.1.0",
-    "mocha": "^5.2.0",
-    "sinon": "^7.1.1"
-  },
-  "dependencies": {
-    "mongodb": "^3.1.9",
-    "mongoose": "^4.11.13",
-    "supertest": "^3.3.0",
-    "express": "^4.16.4",
-    "js-logger": "^1.6.0",
-    "less-middleware": "^3.0.1",
-    "lodash": "^4.17.11"
-  }
+    "name": "unibrowser-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "start": "node src/index",
+        "test": "mocha"
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "chai": "4.2.0",
+        "debug": "^4.1.0",
+        "euclidean-distance": "^1.0.0",
+        "express": "^4.16.4",
+        "ip": "^1.1.5",
+        "js-logger": "1.4.1",
+        "less-middleware": "3.0.1",
+        "lodash": "^4.17.4",
+        "mocha": "^5.2.0",
+        "mongodb": "^3.1.9",
+        "mongoose": "^4.11.13",
+        "node-schedule": "^1.2.5",
+        "request": "^2.88.0",
+        "sinon": "6.3.5",
+        "supertest": "^3.3.0",
+        "underscore": "^1.9.1",
+        "underscore.deferred": "^0.4.0"
+    }
 }
