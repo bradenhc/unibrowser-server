@@ -1,8 +1,8 @@
 const express = require('express');
 const mongo = require('../mongo');
 const utils = require('./utils');
-var WordPOS = require('wordpos'),
-    Lemmer = require('lemmer');
+const WordPOS = require('wordpos');
+const Lemmer = require('lemmer');
 wordpos = new WordPOS();
 const faqRouter = express.Router();
 
