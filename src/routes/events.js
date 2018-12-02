@@ -3,6 +3,7 @@ const mongo = require('../mongo');
 const _ = require('underscore.deferred');
 const request = require('request');
 const utils = require('./utils');
+const distance = require('euclidean-distance');
 
 const eventsRouter = express.Router();
 
