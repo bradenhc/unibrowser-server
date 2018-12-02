@@ -28,34 +28,36 @@ sportsRouter.get('/sports', (req, res) => {
 
     
     if (isNaN(queryString)) {
-        // console.log('This is not number');
-        // var chrono = require('chrono-node');
-        // mongo.get('school_sports', {}, { _id: 0 }, (err, result) => {
-        //     if (err) return utils.respondWithError(res);
-        //     if (result.length != 0) {
-        //         sportsNameList = result[0]["sports_name_list"]
-        //         sportsIdList = result[0]["sports_id_list"]
+        console.log('This is not number');
+        var chrono = require('chrono-node');
+        mongo.get('school_sports', {}, { _id: 0 }, (err, result) => {
+            if (err) return utils.respondWithError(res);
+            if (result.length != 0) {
+                sportsNameList = result[0]["sports_name_list"]
+                sportsIdList = result[0]["sports_id_list"]
 
-        //         console.log(chrono.parseDate(queryString));
-        //         dateQuery = chrono.parseDate(queryString)
-        //         sportId = getSportFromQuery(queryString, sportsNameList, sportsIdList)
-        //         console.log("SportId : " + sportId)
-        //         if (sportId == -1) {
-        //             sportQuery = {"date" : new Date(dateQuery)}
-        //         } else {
-        //             sportQuery = {"sport_id" : sportId, "date" : Date(dateQuery)}
-        //         }
-        //         console.log(sportQuery)
-        //         mongo.get('sportsevent', sportQuery, { _id: 0 }, (err, result) => {
-        //             if (err) return utils.respondWithError(res);
-        //             if (result.length != 0) {
-        //                 return res.status(200).json(result);
-        //             }
-        //             return res.status(404).json({ message: 'Could not find sports information' });
-        //         });
-        //     }
-        //     return res.status(404).json({ message: 'Could not find sports information' });
-        // });
+                console.log(chrono.parseDate(queryString));
+                dateQuery = chrono.parseDate(queryString)
+                sportId = getSportFromQuery(queryString, sportsNameList, sportsIdList)
+                console.log("SportId : " + sportId)
+                dateStart = new Date()
+                dateEnd = new Date(dateQuery)
+                if (sportId == -1) {
+                    sportQuery = {"date" : { "$gte" : dateStart}}
+                } else {
+                    sportQuery = {"sport_id" : sportId, "date" : { "$gte" : dateStart, "$lt" : dateEnd}}
+                }
+                console.log(sportQuery)
+                mongo.get('sportsevent',sportQuery, { _id: 0 }, {"date": 1}, (err, result) => {
+                    if (err) return utils.respondWithError(res);
+                    if (result.length != 0) {
+                        return res.status(200).json(result);
+                    }
+                    return res.status(404).json({ message: 'Could not find sports information' });
+                });
+            }
+            // return res.status(404).json({ message: 'Could not find sports information' });
+        });
     } else {
         if(queryString == "-1") {
             //Return school sports
