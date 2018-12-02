@@ -1,0 +1,8 @@
+{
+  "rootDir" : "C:/Users/koshy/Desktop/SEM/Final1/unibrowser-server",
+  "dbUrl": "localhost",
+  "dbPort": "27017",
+  "dbName": "unibrowser",
+  "dbUsername": "",
+  "dbPassword": ""
+}
