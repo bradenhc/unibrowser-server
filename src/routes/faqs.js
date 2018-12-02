@@ -1,7 +1,9 @@
 const express = require('express');
 const mongo = require('../mongo');
 const utils = require('./utils');
-
+var WordPOS = require('wordpos'),
+    Lemmer = require('lemmer');
+wordpos = new WordPOS();
 const faqRouter = express.Router();
 
 /**
@@ -12,7 +14,18 @@ const faqRouter = express.Router();
  * a 500 response will be returned.
  */
 faqRouter.get('/faqs', (req, res) => {
-    const query = req.query.query || '';
+	
+	const query = req.query.query || ''; 
+    wordpos.getNouns('a person Abhi Bachchan who is deemed to be despicable or contemptible; "only a rotter would do that"; "kill the rat"; "throw the bum out"; "you cowardly little pukes!"; "the British call a contemptible person a `git." The angry bear chased the frightened little squirrel.', function(result){
+        console.log(result);
+        Lemmer.lemmatize(result, function(err, lemmatize_result){
+            console.log(lemmatize_result);  
+            for(var i=0; i<lemmatize_result.length; i++){
+                var selected_slots = lodash.filter(slotname, x => x.lemma_name === 'cat');
+                console.log(selected_slots)
+            }
+        })
+    });
     let sortCriteria = { title: 1 };
     // First we will search the FAQ title (a.k.a. the question being asked)
     mongo.get('faqs', { title: { $regex: query } }, { _id: 0 }, sortCriteria, (err, result) => {
