@@ -18,6 +18,7 @@
         "express": "^4.16.4",
         "ip": "^1.1.5",
         "js-logger": "1.4.1",
+        "lemmer": "^0.3.0",
         "less-middleware": "3.0.1",
         "lodash": "^4.17.4",
         "mocha": "^5.2.0",
@@ -28,6 +29,7 @@
         "sinon": "6.3.5",
         "supertest": "^3.3.0",
         "underscore": "^1.9.1",
-        "underscore.deferred": "^0.4.0"
+        "underscore.deferred": "^0.4.0",
+        "wordpos": "^1.2.0"
     }
 }
